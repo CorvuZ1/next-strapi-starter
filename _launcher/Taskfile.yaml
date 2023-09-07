@@ -7,3 +7,18 @@ tasks:
       - cp .env.example .env
       - cp .env.example ../frontend/.env
       - cp .env.example ../backend/.env
+
+  build:
+    desc: Билд сервисов без кэша
+    cmds:
+      - docker-compose build --no-cache
+
+  up:
+    desc: Запустить сервисы
+    cmds:
+      - docker-compose up -d
+
+  delete_containers:
+    desc: Удалить все контейнеры
+    cmds:
+      - docker rm $(docker ps -a -f status=exited -f status=created -q)

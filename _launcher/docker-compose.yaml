@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   frontend:
-    container_name: frontend-${NODE_ENV}
+    container_name: frontend
     build:
       context: ../frontend
       dockerfile: "../_launcher/${NODE_ENV}/Dockerfile.frontend"
@@ -15,7 +15,7 @@ services:
       - strapi
 
   backend:
-    container_name: backend-${NODE_ENV}
+    container_name: backend
     depends_on:
       - database
     build:
@@ -35,7 +35,7 @@ services:
       DATABASE_SSL: "false"
 
   database:
-    container_name: database-${NODE_ENV}
+    container_name: database
     image: postgres:14.1-alpine
     restart: always
     ports:
@@ -48,6 +48,20 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_DB: ${DATABASE_NAME}
+
+  web:
+    container_name: web
+    image: nginx:latest
+    restart: always
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - strapi
+    volumes:
+      - ../web:/etc/nginx/conf.d
+    ports:
+      - 80:80
 
 networks:
   strapi:
