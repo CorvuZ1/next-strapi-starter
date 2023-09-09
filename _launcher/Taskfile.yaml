@@ -1,5 +1,7 @@
 version: "3"
 
+dotenv: [".env"]
+
 tasks:
   env:
     desc: Создать .env файлы
@@ -8,17 +10,28 @@ tasks:
       - cp .env.example ../frontend/.env
       - cp .env.example ../backend/.env
 
-  build:
-    desc: Билд сервисов без кэша
+  pmode:
+    - echo 'MODE:' $NODE_ENV
+
+  dc:
+    desc: Удалить все контейнеры
     cmds:
-      - docker-compose build --no-cache
+      - docker rm $(docker ps -a -f status=exited -f status=created -q)
 
   up:
     desc: Запустить сервисы
     cmds:
       - docker-compose up -d
 
-  delete_containers:
-    desc: Удалить все контейнеры
+  build:
+    desc: Собрать сервисы без кэша
     cmds:
-      - docker rm $(docker ps -a -f status=exited -f status=created -q)
+      - docker-compose build --no-cache
+
+  start:
+    desc: Запустить проект
+    cmds:
+      - task pmode
+      - task build
+      - task dc
+      - task up

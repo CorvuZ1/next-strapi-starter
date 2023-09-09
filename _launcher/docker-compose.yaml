@@ -67,3 +67,4 @@ networks:
   strapi:
 volumes:
   database:
+    name: "database_volume"
