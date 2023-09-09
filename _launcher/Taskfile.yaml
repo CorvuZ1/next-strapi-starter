@@ -18,6 +18,11 @@ tasks:
     cmds:
       - docker rm $(docker ps -a -f status=exited -f status=created -q)
 
+  sc:
+    desc: Остановить все контейнеры
+    cmds:
+      - docker stop $(docker ps -a -q)
+
   up:
     desc: Запустить сервисы
     cmds:
