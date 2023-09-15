@@ -1,7 +1,6 @@
 # next-strapi-starter
 
-cd _launcher
-task env
+Серверные запросы через API_URL в .env.example, после изменений - task env
 
 1. cd _launcher
 2. task env
