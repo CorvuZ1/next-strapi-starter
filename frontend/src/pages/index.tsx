@@ -11,7 +11,7 @@ const HomePage: NextPage<HomePageProps> = ({ message, hasError }) => {
     <div
       className={twMerge(
         !hasError ? "from-cyan-500 to-blue-500" : "from-[#ee7474] to-red-500",
-        "flex min-h-screen items-center justify-center bg-gradient-to-r py-5 text-center text-6xl font-bold text-white"
+        "flex min-h-screen items-center justify-center bg-gradient-to-r py-5  text-center text-6xl font-bold text-white"
       )}
     >
       {message}
@@ -23,7 +23,7 @@ export default HomePage;
 
 export const getStaticProps: GetStaticProps<HomePageProps> = async () => {
   try {
-    const req = await fetch(process.env.API_URL + "/hello");
+    const req = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/hello");
     const data = await req.json();
 
     if (!req.ok) throw new Error();
@@ -32,7 +32,8 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async () => {
       props: {
         message: data.message,
         hasError: false
-      }
+      },
+      revalidate: 120
     };
   } catch (error) {
     console.log(error);
@@ -41,7 +42,8 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async () => {
       props: {
         message: "Что-то пошло не так",
         hasError: true
-      }
+      },
+      revalidate: 120
     };
   }
 };
