@@ -1,27 +1,17 @@
 import { GetStaticProps, NextPage } from "next";
-import { twMerge } from "tailwind-merge";
+import { HelloWorld, IHelloWorldProps } from "@/components/HelloWorld";
 
-interface HomePageProps {
-  message: string;
-  hasError: boolean;
-}
+type THomePageProps = Pick<IHelloWorldProps, "message"> & { hasError: boolean };
 
-const HomePage: NextPage<HomePageProps> = ({ message, hasError }) => {
-  return (
-    <div
-      className={twMerge(
-        !hasError ? "from-cyan-500 to-blue-500" : "from-[#ee7474] to-red-500",
-        "flex min-h-screen items-center justify-center bg-gradient-to-r py-5  text-center text-6xl font-bold text-white"
-      )}
-    >
-      {message}
-    </div>
-  );
+const HomePage: NextPage<THomePageProps> = props => {
+  const { message, hasError } = props;
+
+  return <HelloWorld message={message} status={hasError ? "error" : "success"} />;
 };
 
 export default HomePage;
 
-export const getStaticProps: GetStaticProps<HomePageProps> = async () => {
+export const getStaticProps: GetStaticProps<THomePageProps> = async () => {
   try {
     const req = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/hello");
     const data = await req.json();
